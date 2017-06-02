@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.Socket;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -49,8 +50,10 @@ public class MinesweeperClientFrame extends JFrame implements ActionListener {
     private final JTextField addressField, portField;
     private final JButton connectButton;
     
+    private Socket socket;
+    
     /**
-     * Create the frame.
+     * Create a MinesweeperClientFrame
      */
     private MinesweeperClientFrame() {
         setTitle("Minesweeper Client");
@@ -97,7 +100,31 @@ public class MinesweeperClientFrame extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0) {
-        // TODO Auto-generated method stub
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == connectButton) {
+            try {
+                socket = new Socket(addressField.getText(), Integer.parseInt(portField.getText()));
+                
+                connectButton.setText("Connected.");
+                disableInputComponents();
+                
+                
+            
+            } catch (Exception e1) {
+                socket = null;
+            }
+        }
     }
+    
+    /**
+     * Disables the input components used to initiate the Minesweeper client-server connection
+     */
+    private void disableInputComponents() {
+        connectButton.setEnabled(false);
+        connectButton.setFocusable(false);
+        
+        addressField.setEditable(false);
+        portField.setEditable(false);
+    }
+    
 }
